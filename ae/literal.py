@@ -62,7 +62,7 @@ from typing import Any, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 class Literal:

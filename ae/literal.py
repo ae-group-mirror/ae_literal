@@ -62,7 +62,7 @@ from typing import Any, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec
 
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 class Literal:
@@ -79,7 +79,7 @@ class Literal:
         super().__init__()
         self._name = name
         self._literal_or_value = None
-        self._type = None if value_type is type(None) else value_type
+        self._type = None if isinstance(value_type, type(None)) else value_type
         if literal_or_value is not None:
             self.value = literal_or_value
 

@@ -2,7 +2,10 @@
   <dictionary name="andi">
     <words>
       <w>meth</w>
+      <w>mypy</w>
       <w>paramref</w>
+      <w>pylint</w>
+      <w>pytest</w>
     </words>
   </dictionary>
 </component>

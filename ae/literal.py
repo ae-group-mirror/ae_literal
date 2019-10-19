@@ -11,21 +11,28 @@ on instantiation through the first (the :paramref:`~Literal.literal_or_value`) a
 of the :class:`Literal` class. The :paramref:`second argument <Literal.value_type>`
 specifies the expected type::
 
-    number_literal = Literal("3", int)
+    int_literal = Literal("3", int)
 
 Alternatively you could also set the :ref:`evaluable literal string
 <evaluable-literal-formats>` after the instantiation directly via the
 :attr:`~Literal.value` property setter::
 
-    number_literal = Literal(value_type=int)
-    number_literal.value = "3"
+    int_literal = Literal(value_type=int)
+    int_literal.value = "3"
 
 The representing numeric value provides the :attr:`~Literal.value` property getter::
 
-    assert number_literal.value == 3
-    assert type(number_literal.value) is int
+    assert int_literal.value == 3
+    assert type(int_literal.value) is int
 
-By specifying the type of the literal value within the :paramref:`~Literal.value_type`
+Whenever possible a type conversion will be done, e.g. you can force/restrict the value
+to a `float` even if the literal specifies an integer::
+
+    float_literal = Literal("3", float)
+    assert float_literal.value = 3.0
+    assert type(float_literal.value) is float
+
+So by specifying the type of the literal value within the :paramref:`~Literal.value_type`
 argument you restrict a :class:`Literal` instance to a certain/fixed type. Any type/class
 can be used::
 
@@ -44,8 +51,9 @@ Also here you could alternatively use the :attr:`~Literal.value` property setter
     date_literal = Literal()
     date_literal.value = '(datetime.date.today())'
 
-The literal string of the last two examples has to start and end with round brackets
-for to mark it as a :ref:`evaluable literal <evaluable-literal-formats>`.
+.. note::
+  The literal string of the last two examples has to start and end with round brackets
+  for to mark it as a :ref:`evaluable literal <evaluable-literal-formats>`.
 
 If you instead want to specify a date format literal string then you have
 to specify the value type like so::
@@ -72,12 +80,16 @@ a ValueError exception will be raised::
 All the other supported literal formats are documented at the :attr:`~Literal.value` property.
 """
 import datetime
-from typing import Any, Optional, Tuple, Type
+from typing import Any, Callable, Optional, Tuple, Type
 
-from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec
+from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec     # type: ignore  # for mypy
 
 
-__version__ = '0.0.9'
+__version__ = '0.0.10'
+
+
+BEG_CHARS = "([{'\""
+END_CHARS = ")]}'\""
 
 
 class Literal:
@@ -165,8 +177,7 @@ class Literal:
         if check_val is not None:
             if self._type and self.type_mismatching_with(check_val):
                 raise ValueError(msg + f"type mismatch: {self._type} != {type(check_val)}")
-            else:
-                self._literal_or_value = check_val
+            self._literal_or_value = check_val
 
         return self._literal_or_value
 
@@ -189,6 +200,7 @@ class Literal:
         :meth:`~.console.ConsoleApp.add_option` for to have a function pointer to this
         literal value with lazy/late execution of the value getter (value.append cannot be used in this case
         because the list could have be changed before it get finally read/used).
+
         .. note::
            This method calls the append method of the value object and will therefore
            only work if the value is of type :class:`list` (or a compatible type).
@@ -245,7 +257,7 @@ class Literal:
         return lit_or_val
 
     @staticmethod
-    def _evaluable_literal(literal: str) -> Tuple[Optional[callable], Optional[str]]:
+    def _evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
         """ check evaluable format of literal and possibly return appropriate evaluation function and stripped literal.
 
         :param literal:     string to be checked if it is in the
@@ -263,11 +275,13 @@ class Literal:
                 or (literal.startswith('"""') and literal.endswith('"""')):
             func = try_exec
             ret = literal[3:-3]                                             # code block
-        elif (literal.startswith("[") and literal.endswith("]")) \
-                or (literal.startswith("{") and literal.endswith("}")) \
-                or (literal.startswith("(") and literal.endswith(")")) \
-                or (literal.startswith("'") and literal.endswith("'")) \
-                or (literal.startswith('"') and literal.endswith('"')):
+        elif literal and literal[0] in BEG_CHARS and BEG_CHARS.find(literal[0]) == END_CHARS.find(literal[-1]):
+            # below expression used before for elif above but pylint doesn't like more than 5 boolean expression (R0916)
+            # elif (literal.startswith("[") and literal.endswith("]")) \ ...
+            #    or (literal.startswith("{") and literal.endswith("}")) \
+            #    or (literal.startswith("(") and literal.endswith(")")) \
+            #    or (literal.startswith("'") and literal.endswith("'")) \
+            #    or (literal.startswith('"') and literal.endswith('"')):
             func = try_eval
             ret = literal                                                   # expression/list/dict/tuple/str/... literal
         return func, ret

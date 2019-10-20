@@ -4,9 +4,18 @@
 -->
 # literal Portion Of ae Namespace Package
 
-The portions (modules and sub-packages) of the Application Environment for Python are within
+>The portions (modules and sub-packages) of the Application Environment for Python are within
 the `ae` namespace and are providing helper methods and classes for to develop
 full-featured applications with Python.
+
+[![PyPIVersion](https://img.shields.io/pypi/v/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![GitLabPipeline](https://img.shields.io/gitlab/pipeline/ae-group/ae_literal/master?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIImplementation](https://img.shields.io/pypi/implementation/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIPyVersions](https://img.shields.io/pypi/pyversions/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIWheel](https://img.shields.io/pypi/wheel/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIFormat](https://img.shields.io/pypi/format/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIStatus](https://img.shields.io/pypi/status/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIDownloads](https://img.shields.io/pypi/dm/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
 
 
 ## Installation
@@ -39,6 +48,6 @@ More info on the features and usage of this portion are available at
 [ReadTheDocs](https://ae.readthedocs.io/en/latest/_autosummary/ae.literal.html#module-ae.literal
 "ae_literal documentation").
 
-<!-- Common files version 0.0.21 deployed (with 0.0.21)
-     to the ae_literal module version 0.0.10.
+<!-- Common files version 0.0.22 deployed (with 0.0.22)
+     to the ae_literal module version 0.0.12.
 -->

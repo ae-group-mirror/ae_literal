@@ -85,7 +85,7 @@ from typing import Any, Callable, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec     # type: ignore  # for mypy
 
 
-__version__ = '0.0.12'
+__version__ = '0.0.13'
 
 
 BEG_CHARS = "([{'\""
@@ -103,7 +103,6 @@ class Literal:
                                     :attr:`~Literal.value` property getter).
         :param name:                name of the literal (only used for debugging/error-message).
         """
-        super().__init__()
         self._name = name
         self._literal_or_value = None
         self._type = None if isinstance(value_type, type(None)) else value_type

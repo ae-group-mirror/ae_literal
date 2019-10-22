@@ -4,20 +4,21 @@
 -->
 # literal Portion Of ae Namespace Package
 
+[![GitLabPipeline](https://img.shields.io/gitlab/pipeline/ae-group/ae_literal/master?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIVersion](https://img.shields.io/pypi/v/ae_literal)](https://pypi.org/project/ae-literal/#history)
+
 >The portions (modules and sub-packages) of the Application Environment for Python are within
 the `ae` namespace and are providing helper methods and classes for to develop
 full-featured applications with Python.
 
-[![PyPIVersion](https://img.shields.io/pypi/v/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
-[![GitLabPipeline](https://img.shields.io/gitlab/pipeline/ae-group/ae_literal/master?logo=python)](https://gitlab.com/ae-group/ae_literal)
 [![Coverage](https://ae-group.gitlab.io/ae_literal/coverage.svg)](https://ae-group.gitlab.io/ae_literal/coverage/ae_literal_py.html)
 [![PyLintScore](https://ae-group.gitlab.io/ae_literal/pylint.svg)](https://ae-group.gitlab.io/ae_literal/pylint.log)
-[![PyPIImplementation](https://img.shields.io/pypi/implementation/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
-[![PyPIPyVersions](https://img.shields.io/pypi/pyversions/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
-[![PyPIWheel](https://img.shields.io/pypi/wheel/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
-[![PyPIFormat](https://img.shields.io/pypi/format/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
-[![PyPIStatus](https://img.shields.io/pypi/status/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
-[![PyPIDownloads](https://img.shields.io/pypi/dm/ae_literal?logo=python?logo=python)](https://gitlab.com/ae-group/ae_literal)
+[![PyPIImplementation](https://img.shields.io/pypi/implementation/ae_literal)](https://pypi.org/project/ae-literal/)
+[![PyPIPyVersions](https://img.shields.io/pypi/pyversions/ae_literal)](https://pypi.org/project/ae-literal/)
+[![PyPIWheel](https://img.shields.io/pypi/wheel/ae_literal)](https://pypi.org/project/ae-literal/)
+[![PyPIFormat](https://img.shields.io/pypi/format/ae_literal)](https://pypi.org/project/ae-literal/)
+[![PyPIStatus](https://img.shields.io/pypi/status/ae_literal)](https://libraries.io/pypi/ae-literal)
+[![PyPIDownloads](https://img.shields.io/pypi/dm/ae_literal)](https://pypi.org/project/ae-literal/#files)
 
 
 ## Installation
@@ -50,6 +51,6 @@ More info on the features and usage of this portion are available at
 [ReadTheDocs](https://ae.readthedocs.io/en/latest/_autosummary/ae.literal.html#module-ae.literal
 "ae_literal documentation").
 
-<!-- Common files version 0.0.25 deployed (with 0.0.25)
-     to the ae_literal module version 0.0.16.
+<!-- Common files version 0.0.26 deployed (with 0.0.26)
+     to the ae_literal module version 0.0.17.
 -->

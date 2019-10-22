@@ -85,7 +85,7 @@ from typing import Any, Callable, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec     # type: ignore  # for mypy
 
 
-__version__ = '0.0.16'
+__version__ = '0.0.17'
 
 
 BEG_CHARS = "([{'\""

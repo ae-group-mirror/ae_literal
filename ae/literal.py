@@ -3,8 +3,9 @@ literal type detection and evaluation
 =====================================
 
 Numbers and other none-text-values, e.g. hacked into your application by a user or stored in
-a :ref:`configuration file <config-files>` are represented by strings or literals.
-An instance of the :class:`Literal` class converts a string into the representing value and type.
+a :ref:`configuration file <config-files>` are represented by literal strings.
+An instance of the :class:`Literal` class converts such a literal string into the
+representing value and type.
 
 A :ref:`evaluable literal <evaluable-literal-formats>` can e.g. be passed
 on instantiation through the first (the :paramref:`~Literal.literal_or_value`) argument
@@ -41,8 +42,10 @@ can be used::
     datetime_literal = Literal(value_type=datetime.datetime)
     my_class_literal = Literal(value_type=MyClass)
 
-No type info is needed on instantiation when the literal is a evaluable python expression.
-For example the following literal gets automatically converted into a datetime object::
+No type info is needed on instantiation when the literal is an
+:ref:`evaluable python expression <evaluable-literal-formats>`.
+For example the following literal gets automatically converted into
+a datetime object::
 
     datetime_literal = Literal('(datetime.datetime.now())')
 
@@ -55,8 +58,9 @@ Also here you could alternatively use the :attr:`~Literal.value` property setter
   The literal string of the last two examples has to start and end with round brackets
   for to mark it as a :ref:`evaluable literal <evaluable-literal-formats>`.
 
-If you instead want to specify a date format literal string then you have
-to specify the value type like so::
+If you instead want to specify a date literal string in one of the supported
+ISO formats (:data:`~ae.core.DATE_TIME_ISO` and :data:`~ae.core.DATE_ISO`) then you
+have to specify the value type like so::
 
     date_literal = Literal('2033-12-31', value_type=datetime.date)
 
@@ -85,11 +89,35 @@ from typing import Any, Callable, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec     # type: ignore  # for mypy
 
 
-__version__ = '0.0.20'
+__version__ = '0.0.21'
 
 
 BEG_CHARS = "([{'\""
 END_CHARS = ")]}'\""
+
+
+def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
+    """ check evaluable format of literal string, possibly return appropriate evaluation function and stripped literal.
+
+    :param literal:     string to be checked if it is in the
+                        :ref:`evaluable literal format <evaluable-literal-formats>` and if
+                        it has to be stripped.
+    :return:            tuple of evaluation/execution function and the (optionally stripped) literal
+                        string (removed triple high-commas on expression/code-blocks) - if
+                        :paramref:`~evaluable_literal.literal` is in one of the supported
+                        :ref:`evaluable literal formats <evaluable-literal-formats>` - else the tuple
+                        (None, <empty string>).
+    """
+    func = None
+    ret = ''
+    if (literal.startswith("'''") and literal.endswith("'''")) \
+            or (literal.startswith('"""') and literal.endswith('"""')):
+        func = try_exec
+        ret = literal[3:-3]                                             # code block
+    elif literal and literal[0] in BEG_CHARS and BEG_CHARS.find(literal[0]) == END_CHARS.find(literal[-1]):
+        func = try_eval
+        ret = literal                                                   # expression/list/dict/tuple/str/... literal
+    return func, ret
 
 
 class Literal:
@@ -237,7 +265,7 @@ class Literal:
         :return:            determined/converted value or self._lit_or_val if value could not be recognized/converted.
         """
         if isinstance(lit_or_val, str):
-            func, eval_expr = self._evaluable_literal(lit_or_val)
+            func, eval_expr = evaluable_literal(lit_or_val)
             if func:
                 lit_or_val = self._chk_val_reset_else_set_type(func(eval_expr))
 
@@ -254,36 +282,6 @@ class Literal:
                     try_call(self._type, lit_or_val, ignored_exceptions=(TypeError,)))  # ignore int(None) exception
 
         return lit_or_val
-
-    @staticmethod
-    def _evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
-        """ check evaluable format of literal and possibly return appropriate evaluation function and stripped literal.
-
-        :param literal:     string to be checked if it is in the
-                            :ref:`evaluable literal format <evaluable-literal-formats>` and if
-                            it has to be stripped.
-        :return:            tuple of evaluation/execution function and the (optionally stripped) literal
-                            string (removed triple high-commas on expression/code-blocks) - if
-                            :paramref:`~._evaluable_literal.literal` is in one of the supported
-                            :ref:`evaluable literal formats <evaluable-literal-formats>` - else the tuple
-                            (None, <empty string>).
-        """
-        func = None
-        ret = ''
-        if (literal.startswith("'''") and literal.endswith("'''")) \
-                or (literal.startswith('"""') and literal.endswith('"""')):
-            func = try_exec
-            ret = literal[3:-3]                                             # code block
-        elif literal and literal[0] in BEG_CHARS and BEG_CHARS.find(literal[0]) == END_CHARS.find(literal[-1]):
-            # below expression used before for elif above but pylint doesn't like more than 5 boolean expression (R0916)
-            # elif (literal.startswith("[") and literal.endswith("]")) \ ...
-            #    or (literal.startswith("{") and literal.endswith("}")) \
-            #    or (literal.startswith("(") and literal.endswith(")")) \
-            #    or (literal.startswith("'") and literal.endswith("'")) \
-            #    or (literal.startswith('"') and literal.endswith('"')):
-            func = try_eval
-            ret = literal                                                   # expression/list/dict/tuple/str/... literal
-        return func, ret
 
     def _chk_val_reset_else_set_type(self, value: Any) -> Any:
         """ reset and return passed value if is None, else determine value type and set type (if not already set).

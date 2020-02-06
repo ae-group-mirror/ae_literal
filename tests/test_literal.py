@@ -106,6 +106,11 @@ class TestLiteral:
         assert isinstance(lit.value, str)
         assert lit.value == st[1:-1]
 
+        st = "'tst_str'"
+        lit = Literal(st)
+        assert isinstance(lit.value, str)
+        assert lit.value == st[1:-1]
+
     def test_dict_values(self):
         di = dict(a=1, b=2)
         lit = Literal(repr(di))

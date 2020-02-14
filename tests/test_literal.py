@@ -30,6 +30,16 @@ class TestLiteral:
 
     def test_bool_values(self):
         bs = 'True'
+        lit = Literal(literal_or_value=bs)
+        assert isinstance(lit.value, bool)
+        assert lit.value is True
+
+        bs = 'False'
+        lit = Literal(literal_or_value=bs)
+        assert isinstance(lit.value, bool)
+        assert lit.value is False
+
+        bs = 'True'
         lit = Literal(literal_or_value=bs, value_type=bool)
         assert isinstance(lit.value, bool)
         assert lit.value is True
@@ -45,6 +55,16 @@ class TestLiteral:
         assert lit.value is True
 
         bn = 0
+        lit = Literal(literal_or_value=bn, value_type=bool)
+        assert isinstance(lit.value, bool)
+        assert lit.value is False
+
+        bn = '1+0'
+        lit = Literal(literal_or_value=bn, value_type=bool)
+        assert isinstance(lit.value, bool)
+        assert lit.value is True
+
+        bn = "1-1"
         lit = Literal(literal_or_value=bn, value_type=bool)
         assert isinstance(lit.value, bool)
         assert lit.value is False

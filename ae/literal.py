@@ -72,8 +72,9 @@ determined/evaluated and returned::
    assert literal_value == datetime.date(2033, 12, 31)
 
 The :attr:`~Literal.value` property getter of a :class:`Literal` instance with an applied
-type restricting will try to convert the literal to a value of the specified type.
-If the evaluation result has not the correct type, then the getter tries the
+type restricting will try to convert the literal to a value of the specified type; even
+valid string expressions resulting in a value with the correct type are converted in this case.
+If the evaluation result has not the correct type, then the getter finally tries the
 value conversion with the constructor of the type class. If this fails too then
 a ValueError exception will be raised::
 
@@ -89,7 +90,7 @@ from typing import Any, Callable, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec     # type: ignore  # for mypy
 
 
-__version__ = '0.0.22'
+__version__ = '0.0.23'
 
 
 BEG_CHARS = "([{'\""
@@ -117,16 +118,20 @@ def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
     elif literal and literal[0] in BEG_CHARS and BEG_CHARS.find(literal[0]) == END_CHARS.find(literal[-1]):
         func = try_eval
         ret = literal                                                   # expression/list/dict/tuple/str/... literal
+    elif literal in ('False', 'True'):
+        func = bool                                                     # bool literal
+        if literal == 'True':
+            ret = literal       # else return empty string to get bool('') == False
     else:
         try:
             int(literal)
             func = int
-            ret = literal
+            ret = literal                                               # int literal
         except ValueError:
             try:
                 float(literal)
                 func = float
-                ret = literal
+                ret = literal                                           # float literal
             except ValueError:
                 pass
 

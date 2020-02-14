@@ -89,6 +89,18 @@ class TestLiteral:
         assert isinstance(lit.value, datetime.date)
         assert lit.value == eval(ex)
 
+    def test_float_values(self):
+        fv = "3.69"
+        lit = Literal(fv)
+        assert isinstance(lit.value, float)
+        assert lit.value == eval(fv)
+
+    def test_int_values(self):
+        iv = '369'
+        lit = Literal(iv)
+        assert isinstance(lit.value, int)
+        assert lit.value == eval(iv)
+
     def test_tuple_values(self):
         tu = (1, 2, 3)
         lit = Literal(repr(tu))
@@ -97,19 +109,41 @@ class TestLiteral:
 
     def test_str_values(self):
         st = "tst_str"
+
         lit = Literal(repr(st))
         assert isinstance(lit.value, str)
         assert lit.value == st
 
-        st = '"tst_str"'
         lit = Literal(st)
         assert isinstance(lit.value, str)
-        assert lit.value == st[1:-1]
+        assert lit.value == st
 
-        st = "'tst_str'"
-        lit = Literal(st)
+        lit = Literal('"' + st + '"')
         assert isinstance(lit.value, str)
-        assert lit.value == st[1:-1]
+        assert lit.value == st
+
+        lit = Literal("'" + st + "'")
+        assert isinstance(lit.value, str)
+        assert lit.value == st
+
+    def test_str_values_with_type(self):
+        st = "tst_str"
+
+        lit = Literal(repr(st), value_type=str)
+        assert isinstance(lit.value, str)
+        assert lit.value == repr(st)
+
+        lit = Literal(st, value_type=str)
+        assert isinstance(lit.value, str)
+        assert lit.value == st
+
+        lit = Literal('"' + st + '"', value_type=str)
+        assert isinstance(lit.value, str)
+        assert lit.value == '"' + st + '"'
+
+        lit = Literal("'" + st + "'", value_type=str)
+        assert isinstance(lit.value, str)
+        assert lit.value == repr(st)
 
     def test_dict_values(self):
         di = dict(a=1, b=2)
@@ -158,18 +192,24 @@ class TestLiteral:
         lit = Literal()
         assert lit.convert_value(repr(li)) == li
 
-    def test_int_type_restriction(self):
+    def test_num_type_restriction(self):
         fv = 3.69
         iv = int(fv)
-
         lit = Literal(value_type=int)
+        assert lit._type == int
+
         lit.value = fv
         assert isinstance(lit.value, int)
-        assert lit.value == iv   # this one doesn't raise ValueError because int(3.69) == 3
+        assert lit.value == iv   # doesn't raise ValueError because int(3.69) == 3
+
         lit.value = str(fv)
+        assert lit.value == iv
+
+        lit.value = list()
         with pytest.raises(ValueError):
             _ = lit.value
-        lit.value = list()
+
+        lit.value = [fv, iv]
         with pytest.raises(ValueError):
             _ = lit.value
         assert lit._type == int
@@ -188,8 +228,13 @@ class TestLiteral:
         assert lit.value == "[]"    # this one doesn't raise ValueError because list get converted to str repr
         assert lit._type == str
 
-    def test_wrong_date_literal_exception(self):
+    def test_invalid_literal_exception(self):
         ds = '2020-66-99'
         lit = Literal(ds, value_type=datetime.date)
+        with pytest.raises(ValueError):
+            _ = lit.value
+
+        li = "[invalid_list_item, ]"
+        lit = Literal(li, value_type=list)
         with pytest.raises(ValueError):
             _ = lit.value

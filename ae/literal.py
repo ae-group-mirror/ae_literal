@@ -89,7 +89,7 @@ from typing import Any, Callable, Optional, Tuple, Type
 from ae.core import DEF_ENCODE_ERRORS, parse_date, try_call, try_eval, try_exec     # type: ignore  # for mypy
 
 
-__version__ = '0.0.21'
+__version__ = '0.0.22'
 
 
 BEG_CHARS = "([{'\""
@@ -117,6 +117,19 @@ def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
     elif literal and literal[0] in BEG_CHARS and BEG_CHARS.find(literal[0]) == END_CHARS.find(literal[-1]):
         func = try_eval
         ret = literal                                                   # expression/list/dict/tuple/str/... literal
+    else:
+        try:
+            int(literal)
+            func = int
+            ret = literal
+        except ValueError:
+            try:
+                float(literal)
+                func = float
+                ret = literal
+            except ValueError:
+                pass
+
     return func, ret
 
 

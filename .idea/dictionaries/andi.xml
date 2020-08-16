@@ -13,8 +13,10 @@
       <w>pytest</w>
       <w>relicensing</w>
       <w>strftime</w>
+      <w>strptime</w>
       <w>sublicenses</w>
       <w>sublicensing</w>
+      <w>tzinfo</w>
       <w>wipo</w>
     </words>
   </dictionary>

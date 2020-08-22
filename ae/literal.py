@@ -59,7 +59,7 @@ Also here you could alternatively use the :attr:`~Literal.value` property setter
   for to mark it as a :ref:`evaluable literal <evaluable-literal-formats>`.
 
 If you instead want to specify a date literal string in one of the supported
-ISO formats (:data:`~ae.core.DATE_TIME_ISO` and :data:`~ae.core.DATE_ISO`) then you
+ISO formats (:data:`~ae.system.DATE_TIME_ISO` and :data:`~ae.system.DATE_ISO`) then you
 have to specify the value type like so::
 
     date_literal = Literal('2033-12-31', value_type=datetime.date)
@@ -95,7 +95,7 @@ from ae.inspector import try_call, try_eval, try_exec                   # type: 
 from ae.core import DEF_ENCODE_ERRORS                                   # type: ignore
 
 
-__version__ = '0.0.24'
+__version__ = '0.0.25'
 
 
 BEG_CHARS = "([{'\""

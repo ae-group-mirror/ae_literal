@@ -95,7 +95,7 @@ from ae.inspector import try_call, try_eval, try_exec                   # type: 
 from ae.core import DEF_ENCODE_ERRORS                                   # type: ignore
 
 
-__version__ = '0.0.25'
+__version__ = '0.0.26'
 
 
 BEG_CHARS = "([{'\""

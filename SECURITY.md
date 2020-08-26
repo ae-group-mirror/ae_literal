@@ -1,4 +1,3 @@
-<!-- THIS FILE IS EXCLUSIVELY MAINTAINED IN THE NAMESPACE ROOT PACKAGE. CHANGES HAVE TO BE DONE THERE. -->
 # Using This Package Securely
 
 ## Reporting Security Issues

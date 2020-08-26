@@ -31,7 +31,7 @@ if __name__ == "__main__":
         url=f"{nev['repo_root']}/{package_name}",
         # don't needed for native/implicit namespace packages: namespace_packages=[namespace_name],
         # packages=setuptools.find_packages(),
-        packages=[],  # setuptools.find_namespace_packages(include=[namespace_name]),  # find namespace portions
+        packages=['ae.literal'],  # setuptools.find_namespace_packages(include=[namespace_name]),  # find namespace portions
         python_requires=">=3.6",
         install_requires=nev['install_require'],
         setup_requires=nev['setup_require'],

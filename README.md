@@ -36,6 +36,7 @@ full-featured applications with Python.
 
 ## installation
 
+
 Execute the following command for to use the ae.literal module in your
 application. It will install ae.literal into your python (virtual) environment:
  
@@ -44,7 +45,7 @@ pip install ae-literal
 ```
 
 If you instead want to contribute to this portion then first fork
-[the ae-literal repository at GitLab](https://gitlab.com/ae-group/ae_literal "ae.literal code repository"),
+[the ae_literal repository at GitLab](https://gitlab.com/ae-group/ae_literal "ae.literal code repository"),
 then pull it to your machine and finally execute the following command in the root folder
 of this repository (ae_literal):
 
@@ -64,6 +65,8 @@ More info on the features and usage of this portion are available at
 [ReadTheDocs](https://ae.readthedocs.io/en/latest/_autosummary/ae.literal.html#module-ae.literal
 "ae_literal documentation").
 
-<!-- Common files version 0.0.34 deployed (with 0.0.34)
-     to the ae_literal module version 0.0.20.
+<!-- Common files version 0.0.60 deployed version 0.1.27 (with 0.0.60)
+     to https://gitlab.com/ae-group as ae_literal module as well as
+     to https://ae-group.gitlab.io with CI check results as well as
+     to https://pypi.org/project/ae-literal as namespace portion ae-literal.
 -->

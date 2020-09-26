@@ -2,10 +2,9 @@
 import datetime
 import pytest
 
-from ae.base import DATE_TIME_ISO, DATE_ISO
+from ae.base import DATE_TIME_ISO, DATE_ISO, DEF_ENCODE_ERRORS
 from ae.parse_date import parse_date
 from ae.literal import Literal
-from ae.core import DEF_ENCODE_ERRORS
 
 
 class TestLiteral:

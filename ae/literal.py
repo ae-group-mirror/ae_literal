@@ -59,7 +59,7 @@ Also here you could alternatively use the :attr:`~Literal.value` property setter
   for to mark it as a :ref:`evaluable literal <evaluable-literal-formats>`.
 
 If you instead want to specify a date literal string in one of the supported
-ISO formats (:data:`~ae.system.DATE_TIME_ISO` and :data:`~ae.system.DATE_ISO`) then you
+ISO formats (:data:`~ae.base.DATE_TIME_ISO` and :data:`~ae.base.DATE_ISO`) then you
 have to specify the value type like so::
 
     date_literal = Literal('2033-12-31', value_type=datetime.date)
@@ -84,18 +84,16 @@ a ValueError exception will be raised::
 
 All the other supported literal formats are documented at the :attr:`~Literal.value` property.
 
-The :func:`parse_date` helper function is converting date and datetime string literals into the
-built-in types :class:`datetime.datetime` and :class:`datetime.date`.
 """
 import datetime
-from typing import Any, Callable, Dict, Optional, Tuple, Type, Union
+from typing import Any, Callable, Optional, Tuple, Type
 
-from ae.system import DATE_ISO, DATE_TIME_ISO                           # type: ignore
-from ae.inspector import try_call, try_eval, try_exec                   # type: ignore
-from ae.core import DEF_ENCODE_ERRORS                                   # type: ignore
+from ae.base import DEF_ENCODE_ERRORS                                               # type: ignore
+from ae.parse_date import parse_date                                                # type: ignore
+from ae.inspector import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.1.27'
+__version__ = '0.1.28'
 
 
 BEG_CHARS = "([{'\""
@@ -141,75 +139,6 @@ def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
                 pass
 
     return func, ret
-
-
-def parse_date(literal: str, *additional_formats: str, replace: Optional[Dict[str, Any]] = None,
-               ret_date: Optional[bool] = False,
-               dt_seps: Tuple[str, ...] = ('T', ' '), ti_sep: str = ':', ms_sep: str = '.', tz_sep: str = '+',
-               ) -> Optional[Union[datetime.date, datetime.datetime]]:
-    """ parse a date literal string, returning the represented date/datetime or None if date literal is invalid.
-
-    :param literal:             date literal string in the format of :data:`DATE_ISO`, :data:`DATE_TIME_ISO` or in
-                                one of the additional formats passed into the
-                                :paramref:`~parse_date.additional_formats` arguments tuple.
-    :param additional_formats:  additional date literal format string masks (supported mask characters are documented
-                                at the `format` argument of the python method :meth:`~datetime.datetime.strptime`).
-    :param replace:             dict of replace keyword arguments for :meth:`datetime.datetime.replace` call.
-                                Pass e.g. dict(microsecond=0, tzinfo=None) for to set the microseconds of the
-                                resulting date to zero and for to remove the timezone info.
-    :param ret_date:            request return value type: True=datetime.date, False=datetime.datetime (def)
-                                or None=determine type from literal (short date if dt_seps are not in literal).
-    :param dt_seps:             tuple of supported separator characters between the date and time literal parts.
-    :param ti_sep:              separator character of the time parts (hours/minutes/seconds) in literal.
-    :param ms_sep:              microseconds separator character.
-    :param tz_sep:              time-zone separator character.
-    :return:                    represented date/datetime or None if date literal is invalid.
-
-    This function can not only fully replace the python method :meth:`~datetime.datetime.strptime`. On top
-    it supports multiple date formats which are much more flexible used/interpreted.
-    """
-    lp_tz_sep = literal.rfind(tz_sep)
-    lp_ms_sep = literal.rfind(ms_sep)
-    lp_dt_sep = max((literal.find(_) for _ in dt_seps))
-    if ret_date and lp_dt_sep != -1:
-        literal = literal[:lp_dt_sep]       # cut time part if exists caller requested return of short date
-        l_dt_sep = None
-        l_time_sep_cnt = 0
-    else:
-        l_dt_sep = literal[lp_dt_sep] if lp_dt_sep != -1 else None
-        l_time_sep_cnt = literal.count(ti_sep)
-        if not 0 <= l_time_sep_cnt <= 2:
-            return None
-
-    if l_dt_sep:
-        additional_formats += (DATE_TIME_ISO,)
-    additional_formats += (DATE_ISO,)
-
-    for mask in additional_formats:
-        mp_dt_sep = max((mask.find(_) for _ in dt_seps))
-        m_time_sep_cnt = mask.count(ti_sep)
-        if lp_tz_sep == -1 and mask[-3] == tz_sep:
-            mask = mask[:-3]                    # no timezone specified in literal, then remove '+%z' from mask
-        if lp_ms_sep == -1 and mask.rfind(ms_sep) != -1:
-            mask = mask[:mask.rfind(ms_sep)]    # no microseconds specified in literal, then remove '.%f' from mask
-        if 1 <= l_time_sep_cnt < m_time_sep_cnt:
-            mask = mask[:mask.rfind(ti_sep)]    # no seconds specified in literal, then remove ':%S' from mask
-        if mp_dt_sep != -1:
-            if l_dt_sep:
-                m_dt_sep = mask[mp_dt_sep]
-                if l_dt_sep != m_dt_sep:        # if literal uses different date-time-sep
-                    mask = mask.replace(m_dt_sep, l_dt_sep)     # .. then replace in mask
-            else:
-                mask = mask[:mp_dt_sep]         # if no date-time-sep in literal, then remove time part from mask
-
-        ret_val = try_call(datetime.datetime.strptime, literal, mask, ignored_exceptions=(ValueError, ))
-        if ret_val is not None:
-            if replace:
-                ret_val = ret_val.replace(**replace)
-            if ret_date or ret_date is None and l_dt_sep is None:
-                ret_val = ret_val.date()
-            return ret_val
-    return None
 
 
 class Literal:
@@ -277,8 +206,8 @@ class Literal:
         Literal strings that representing a date value (with type restriction to either
         :class:`datetime.datetime` or :class:`datetime.date`) will be converted with the
         :func:`~ae.core.parse_date` function and should be formatted in one of the
-        standard date formats (defined via the :mod:`ae.system` constants
-        :data:`~ae.system.DATE_TIME_ISO` and :data:`~ae.system.DATE_ISO`).
+        standard date formats (defined via the :mod:`ae.base` constants
+        :data:`~ae.base.DATE_TIME_ISO` and :data:`~ae.base.DATE_ISO`).
 
         Literals and values that are not in one of the above formats will finally be passed to
         the constructor of the restricted type class for to try to convert them into their

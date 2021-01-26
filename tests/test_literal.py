@@ -236,6 +236,13 @@ class TestLiteral:
             _ = lit.value
         assert lit._type == int
 
+    def test__repr__and__str__(self):
+        lit = Literal("abc")
+        assert "abc" in repr(lit)
+        assert "abc" in str(lit)
+        assert "Literal" in repr(lit)
+        assert "Literal" in str(lit)
+
     def test_str_type_restriction(self):
         fv = 3.69
         iv = int(fv)

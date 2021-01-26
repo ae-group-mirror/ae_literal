@@ -93,7 +93,7 @@ from ae.parse_date import parse_date                                            
 from ae.inspector import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.1.28'
+__version__ = '0.1.29'
 
 
 BEG_CHARS = "([{'\""
@@ -158,6 +158,9 @@ class Literal:
         if literal_or_value is not None:
             self.value = literal_or_value
 
+    def __repr__(self):
+        return f"Literal({self._literal_or_value!r})"
+
     @property
     def value(self) -> Any:
         """ property representing the value of this Literal instance.
@@ -219,7 +222,7 @@ class Literal:
             try:
                 check_val = self._determine_value(check_val)
             except Exception as ex:
-                raise ValueError(msg + f"throw exception: {ex}")
+                raise ValueError(msg + f"throw exception: {ex}") from ex
 
         self._chk_val_reset_else_set_type(check_val)
         if check_val is not None:

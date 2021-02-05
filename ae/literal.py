@@ -88,12 +88,12 @@ All the other supported literal formats are documented at the :attr:`~Literal.va
 import datetime
 from typing import Any, Callable, Optional, Tuple, Type
 
-from ae.base import DEF_ENCODE_ERRORS                                               # type: ignore
+from ae.base import DEF_ENCODE_ERRORS, UNSET                                        # type: ignore
 from ae.parse_date import parse_date                                                # type: ignore
 from ae.inspector import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.1.29'
+__version__ = '0.1.30'
 
 
 BEG_CHARS = "([{'\""
@@ -313,8 +313,8 @@ class Literal:
         :param value:       just converted new literal value for to be checked and if ok used to set an unset type.
         :return:            passed value or the stored literal/value if passed value is None.
         """
-        if value is None:
+        if value is None or value is UNSET:
             value = self._literal_or_value  # literal evaluation failed, therefore reset to try with type conversion
-        elif not self._type and value is not None:
+        elif not self._type and value is not None and value is not UNSET:
             self._type = type(value)
         return value

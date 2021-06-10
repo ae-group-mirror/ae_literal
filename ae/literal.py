@@ -93,7 +93,7 @@ from ae.parse_date import parse_date                                            
 from ae.inspector import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.1.30'
+__version__ = '0.2.30'
 
 
 BEG_CHARS = "([{'\""

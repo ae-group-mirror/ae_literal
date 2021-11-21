@@ -227,7 +227,7 @@ class TestLiteral:
         lit.value = str(fv)
         assert lit.value == iv
 
-        lit.value = list()
+        lit.value = []
         with pytest.raises(ValueError):
             _ = lit.value
 
@@ -253,7 +253,7 @@ class TestLiteral:
         assert lit.value == str(fv)
         lit.value = iv
         assert lit.value == str(iv)
-        lit.value = list()
+        lit.value = []
         assert lit.value == "[]"    # this one doesn't raise ValueError because list get converted to str repr
         assert lit._type == str
 

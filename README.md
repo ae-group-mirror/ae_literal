@@ -1,75 +1,15 @@
-<!-- THIS FILE IS EXCLUSIVELY MAINTAINED by the project ae V0.2.85 -->
-<!-- THIS FILE IS EXCLUSIVELY MAINTAINED by the project aedev_tpl_namespace_root V0.3.6 -->
-# literal 0.3.32
+# ae_literal module 0.3.33
 
-[![GitLab develop](https://img.shields.io/gitlab/pipeline/ae-group/ae_literal/develop?logo=python)](
-    https://gitlab.com/ae-group/ae_literal)
-[![LatestPyPIrelease](
-    https://img.shields.io/gitlab/pipeline/ae-group/ae_literal/release0.2.32?logo=python)](
-    https://gitlab.com/ae-group/ae_literal/-/tree/release0.2.32)
-[![PyPIVersions](https://img.shields.io/pypi/v/ae_literal)](
-    https://pypi.org/project/ae-literal/#history)
+ae_literal is a Python multi-platform module project based on the [__Kivy__ Framework](https://kivy.org) 
+and some portions of the [__ae__ namespace(Application Environment)](https://ae.readthedocs.io "ae on rtd").
 
->ae namespace module portion literal: literal type detection and evaluation.
+the source code is available at [Gitlab](https://gitlab.com/ae-group/ae_literal) maintained by the user group ae-group.
 
-[![Coverage](https://ae-group.gitlab.io/ae_literal/coverage.svg)](
-    https://ae-group.gitlab.io/ae_literal/coverage/index.html)
-[![MyPyPrecision](https://ae-group.gitlab.io/ae_literal/mypy.svg)](
-    https://ae-group.gitlab.io/ae_literal/lineprecision.txt)
-[![PyLintScore](https://ae-group.gitlab.io/ae_literal/pylint.svg)](
-    https://ae-group.gitlab.io/ae_literal/pylint.log)
+additional credits to:
 
-[![PyPIImplementation](https://img.shields.io/pypi/implementation/ae_literal)](
-    https://gitlab.com/ae-group/ae_literal/)
-[![PyPIPyVersions](https://img.shields.io/pypi/pyversions/ae_literal)](
-    https://gitlab.com/ae-group/ae_literal/)
-[![PyPIWheel](https://img.shields.io/pypi/wheel/ae_literal)](
-    https://gitlab.com/ae-group/ae_literal/)
-[![PyPIFormat](https://img.shields.io/pypi/format/ae_literal)](
-    https://pypi.org/project/ae-literal/)
-[![PyPILicense](https://img.shields.io/pypi/l/ae_literal)](
-    https://gitlab.com/ae-group/ae_literal/-/blob/develop/LICENSE.md)
-[![PyPIStatus](https://img.shields.io/pypi/status/ae_literal)](
-    https://libraries.io/pypi/ae-literal)
-[![PyPIDownloads](https://img.shields.io/pypi/dm/ae_literal)](
-    https://pypi.org/project/ae-literal/#files)
+* [__Erokia__](https://freesound.org/people/Erokia/) and 
+  [__plasterbrain__](https://freesound.org/people/plasterbrain/) at
+  [freesound.org](https://freesound.org) for the sounds.
+* [__iconmonstr__](https://iconmonstr.com/interface/) and
+  [__Google__](https://fonts.google.com/icons?icon.set=Material+Symbols) for the icon images.
 
-
-## installation
-
-
-execute the following command to install the
-ae.literal module
-in the currently active virtual environment:
- 
-```shell script
-pip install ae-literal
-```
-
-if you want to contribute to this portion then first fork
-[the ae_literal repository at GitLab](
-https://gitlab.com/ae-group/ae_literal "ae.literal code repository").
-after that pull it to your machine and finally execute the
-following command in the root folder of this repository
-(ae_literal):
-
-```shell script
-pip install -e .[dev]
-```
-
-the last command will install this module portion, along with the tools you need
-to develop and run tests or to extend the portion documentation. to contribute only to the unit tests or to the
-documentation of this portion, replace the setup extras key `dev` in the above command with `tests` or `docs`
-respectively.
-
-more detailed explanations on how to contribute to this project
-[are available here](
-https://gitlab.com/ae-group/ae_literal/-/blob/develop/CONTRIBUTING.rst)
-
-
-## namespace portion documentation
-
-information on the features and usage of this portion are available at
-[ReadTheDocs](
-https://ae.readthedocs.io/en/latest/_autosummary/ae.literal.html#module-ae.literal
-"ae_literal documentation").

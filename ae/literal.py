@@ -13,10 +13,10 @@ from typing import Any, Callable, Optional, Tuple, Type
 
 from ae.base import DEF_ENCODE_ERRORS, UNSET                                        # type: ignore
 from ae.parse_date import parse_date                                                # type: ignore
-from ae.inspector import try_call, try_eval, try_exec                               # type: ignore
+from ae.dynamicod import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.3.32'
+__version__ = '0.3.33'
 
 
 BEG_CHARS = "([{'\""

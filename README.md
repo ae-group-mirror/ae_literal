@@ -1,4 +1,4 @@
-# ae_literal module 0.3.33
+# ae_literal module 0.3.34
 
 ae_literal is a Python multi-platform module project based on the [__Kivy__ Framework](https://kivy.org) 
 and some portions of the [__ae__ namespace(Application Environment)](https://ae.readthedocs.io "ae on rtd").

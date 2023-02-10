@@ -16,7 +16,7 @@ from ae.parse_date import parse_date                                            
 from ae.dynamicod import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.3.33'
+__version__ = '0.3.34'
 
 
 BEG_CHARS = "([{'\""
@@ -67,71 +67,89 @@ def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
 class Literal:
     """ convert literal string into the corresponding value (and type).
 
-    pass the literal string on instantiation as first (the :paramref:`~Literal.literal_or_value`) argument. the
-    :paramref:`second argument <Literal.value_type>` specifies the expected value type::
+    pass the literal string on instantiation as the first (the :paramref:`~Literal.literal_or_value`) argument::
 
-        >>>number = Literal("3", int)
+        >>> number = Literal("3")
+        >>> number
+        Literal('3')
+        >>> number.value
+        3
+        >>> type(number.value)
+        <class 'int'>
+
+    :class:`Literal` will interpret the value type from the specified literal string. the corresponding `int` value
+    provides the :attr:`~Literal.value` attribute.
+
+    to make sure that a number-like literal will be interpreted as a string enclose it in high-commas.
+    the following example will therefore result as a string type::
+
+        >>> number = Literal("'3'")
+        >>> number
+        Literal("'3'")
+        >>> number.value
+        '3'
+        >>> type(number.value)
+        <class 'str'>
+
+    another way to ensure the correct value type, is to specify it with the optional
+    :paramref:`second argument <Literal.value_type>`::
+
+        >>> number = Literal("3", str)
+        >>> number
+        Literal('3')
+        >>> number.value
+        '3'
 
     alternatively assign the :ref:`evaluable literal string <evaluable-literal-formats>` after the instantiation,
     directly to the :attr:`~Literal.value` attribute of the :class:`Literal` instance::
 
-        >>>number = Literal(value_type=int)
-        >>>number.value = "3"
-
-    the corresponding `int` value provides the :attr:`~Literal.value` attribute::
-
-        >>>assert number.value == 3
-        >>>assert type(number.value) is int
-
-    the second argument :paramref:`Literal.value_type` is not needed when the literal string indicates the exact type::
-
-        >>>number = Literal("6")
-        >>>assert type(number.value) is int
-
-    specifying the second argument forces/restricts the value to a type, e.g. in the following example to a `float` even
-    if the literal specifies an integer::
-
-        >>>float_number = Literal("9", float)
-        >>>assert float_number.value = 9.0
-        >>>assert type(float_number.value) is float
+        >>> number = Literal(value_type=str)
+        >>> number.value = "3"
+        >>> number.value
+        '3'
 
     any type can be specified as the literal value type::
 
-        my_list = Literal(value_type=list)
-        my_dict = Literal(value_type=dict)
-        my_datetime = Literal(value_type=datetime.datetime)
-        my_instance = Literal(value_type=MyClass)
+        >>> my_list = Literal(value_type=list)
+        >>> my_dict = Literal(value_type=dict)
+        >>> my_datetime = Literal(value_type=datetime.datetime)
+        >>> class MyClass:
+        ...     pass
+        >>> my_instance = Literal(value_type=MyClass)
 
-    by converting an :ref:`evaluable python expression literal <evaluable-literal-formats>` the value type get
-    automatically determined. for example the following literal gets automatically converted into a `datetime` object::
+    the value type get automatically determined also for
+    :ref:`evaluable python expression literal <evaluable-literal-formats>` . for example the following literal gets
+    converted into a `datetime` object::
 
-        >>>datetime_value = Literal('(datetime.datetime.now())')
+        >>> datetime_value = Literal('(datetime.datetime.now())')
 
     also if assigned directly to the :attr:`~Literal.value` attribute::
 
-        >>>date_value = Literal()
-        >>>date_value.value = '(datetime.date.today())'
+        >>> date_value = Literal()
+        >>> date_value.value = '(datetime.date.today())'
 
-    .. hint::
+    .. note::
         the literal string of the last two examples has to start and end with round brackets, to mark it as a
         :ref:`evaluable literal <evaluable-literal-formats>`.
 
     to convert calendar date literal strings into one of the supported ISO formats (:data:`~ae.base.DATE_TIME_ISO`
     or :data:`~ae.base.DATE_ISO`), the expected value type has to be specified::
 
-        >>>date_value = Literal('2033-12-31', value_type=datetime.date)
-        >>>assert date_value.value == datetime.date(2033, 12, 31)
+        >>> date_value = Literal('2033-12-31', value_type=datetime.date)
+        >>> assert date_value.value == datetime.date(2033, 12, 31)
 
     a `ValueError` exception will be raised if the conversion fails, or if the result cannot be converted into the
     requested value type::
 
-        >>>date_literal = Literal(value_type=datetime.date)
-        >>>date_literal.value = "invalid-date-literal"
-        >>>date_value = date_literal.value             # value getter raises ValueError
+        >>> date_literal = Literal(value_type=datetime.date)
+        >>> date_literal.value = "invalid-date-literal"
+        >>> date_value = date_literal.value         # doctest: +ELLIPSIS, +IGNORE_EXCEPTION_DETAIL
+        Traceback (most recent call last):
+        ...
+        ValueError
 
     all supported literal formats are documented at the :attr:`~Literal.value` property/attribute.
     """
-
     def __init__(self, literal_or_value: Optional[Any] = None, value_type: Optional[Type] = None, name: str = 'LiT'):
         """ create new Literal instance.
 
@@ -230,7 +248,7 @@ class Literal:
                 self._type = type(lit_or_val)
 
     def append_value(self, item_value: Any) -> Any:
-        """ add new item to the list value of this Literal instance (lazy/late self.value getter call function pointer).
+        """ add new item to the list value of this Literal instance (lazy `self.value` getter call function pointer).
 
         :param item_value:  value of the item to be appended to the value of this Literal instance.
         :return:            the value (==list) of this Literal instance.
@@ -265,7 +283,7 @@ class Literal:
         """ check if this literal instance would reject the passed value because of type mismatch.
 
         :param value:       new literal value.
-        :return:            True if the passed value would have an type mismatch or if literal type is still not set,
+        :return:            True if the passed value would have a type mismatch or if literal type is still not set,
                             else False.
         """
         return self._type != type(value)

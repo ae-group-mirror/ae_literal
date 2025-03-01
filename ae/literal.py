@@ -16,7 +16,7 @@ from ae.parse_date import parse_date                                            
 from ae.dynamicod import try_call, try_eval, try_exec                               # type: ignore
 
 
-__version__ = '0.3.34'
+__version__ = '0.3.35'
 
 
 BEG_CHARS = "([{'\""
@@ -224,8 +224,8 @@ class Literal:
        """
         check_val = self._literal_or_value
         msg = f"Literal {self._name} with value {check_val!r} "
-        if self.type_mismatching_with(check_val):     # first or new late real value conversion/initialization
-            try:
+        if isinstance(check_val, str) or self.type_mismatching_with(check_val):
+            try:            # first or new late real value conversion/initialization
                 check_val = self._determine_value(check_val)
             except Exception as ex:
                 raise ValueError(msg + f"throw exception: {ex}") from ex
@@ -242,7 +242,7 @@ class Literal:
     def value(self, lit_or_val: Any):
         if lit_or_val is not None:
             if isinstance(lit_or_val, bytes) and self._type != bytes:       # if not restricted to bytes
-                lit_or_val = lit_or_val.decode('utf-8', DEF_ENCODE_ERRORS)  # ..then convert bytes to string
+                lit_or_val = lit_or_val.decode(errors=DEF_ENCODE_ERRORS)    # convert bytes to 'utf-8'-encoded string
             self._literal_or_value = lit_or_val     # late evaluation: real value will be checked/converted by getter
             if not self._type and not isinstance(lit_or_val, str):          # set type if unset and no eval
                 self._type = type(lit_or_val)

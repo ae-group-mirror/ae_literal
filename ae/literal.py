@@ -9,21 +9,21 @@ the :class:`Literal` class implemented by this portion converts such a
 :ref:`evaluable literal string <evaluable-literal-formats>` into the corresponding value (and type).
 """
 import datetime
-from typing import Any, Callable, Optional, Tuple, Type
+from collections.abc import Callable
+from typing import Any
 
-from ae.base import DEF_ENCODE_ERRORS, UNSET                                        # type: ignore
-from ae.parse_date import parse_date                                                # type: ignore
-from ae.dynamicod import try_call, try_eval, try_exec                               # type: ignore
-
-
-__version__ = '0.3.35'
+from ae.base import DEF_ENCODE_ERRORS, UNSET, parse_date                                                # type: ignore
+from ae.dynamicod import try_call, try_eval, try_exec                                                   # type: ignore
 
 
-BEG_CHARS = "([{'\""
-END_CHARS = ")]}'\""
+__version__ = '0.3.36'
 
 
-def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
+_BEG_CHARS = "([{'\""
+_END_CHARS = ")]}'\""
+
+
+def _evaluable_literal(literal: str) -> tuple[Callable | None, str | None]:
     """ check evaluable format of literal string, possibly return appropriate evaluation function and stripped literal.
 
     :param literal:     string to be checked if it is in the
@@ -31,7 +31,7 @@ def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
                         it has to be stripped.
     :return:            tuple of evaluation/execution function and the (optionally stripped) literal
                         string (removed triple high-commas on expression/code-blocks) - if
-                        :paramref:`~evaluable_literal.literal` is in one of the supported
+                        :paramref:`~_evaluable_literal.literal` is in one of the supported
                         :ref:`evaluable literal formats <evaluable-literal-formats>` - else the tuple
                         (None, <empty string>).
     """
@@ -41,7 +41,7 @@ def evaluable_literal(literal: str) -> Tuple[Optional[Callable], Optional[str]]:
             or (literal.startswith('"""') and literal.endswith('"""')):
         func = try_exec
         ret = literal[3:-3]                                             # code block
-    elif literal and literal[0] in BEG_CHARS and BEG_CHARS.find(literal[0]) == END_CHARS.find(literal[-1]):
+    elif literal and literal[0] in _BEG_CHARS and _BEG_CHARS.find(literal[0]) == _END_CHARS.find(literal[-1]):
         func = try_eval
         ret = literal                                                   # expression/list/dict/tuple/str/... literal
     elif literal in ('False', 'True'):
@@ -150,7 +150,7 @@ class Literal:
 
     all supported literal formats are documented at the :attr:`~Literal.value` property/attribute.
     """
-    def __init__(self, literal_or_value: Optional[Any] = None, value_type: Optional[Type] = None, name: str = 'LiT'):
+    def __init__(self, literal_or_value: Any | None = None, value_type: type | None = None, name: str = 'LiT'):
         """ create new Literal instance.
 
         :param literal_or_value:    initial literal (evaluable string expression) or value of this instance.
@@ -214,7 +214,7 @@ class Literal:
 
         literal strings that representing a date value (with type restriction to either
         :class:`datetime.datetime` or :class:`datetime.date`) will be converted with the
-        :func:`~ae.core.parse_date` function and should be formatted in one of the
+        :func:`~ae.base.parse_date` function and should be formatted in one of the
         standard date formats (defined via the :mod:`ae.base` constants
         :data:`~ae.base.DATE_TIME_ISO` and :data:`~ae.base.DATE_ISO`).
 
@@ -233,6 +233,7 @@ class Literal:
         self._chk_val_reset_else_set_type(check_val)
         if check_val is not None:
             if self._type and self.type_mismatching_with(check_val):
+                # noinspection PyStringConversionWithoutDunderMethod
                 raise ValueError(msg + f"type mismatch: {self._type} != {type(check_val)}")
             self._literal_or_value = check_val
 
@@ -295,7 +296,7 @@ class Literal:
         :return:            determined/converted value or self._lit_or_val if value could not be recognized/converted.
         """
         if isinstance(lit_or_val, str):
-            func, eval_expr = evaluable_literal(lit_or_val)
+            func, eval_expr = _evaluable_literal(lit_or_val)
             if func:
                 lit_or_val = self._chk_val_reset_else_set_type(func(eval_expr))
 

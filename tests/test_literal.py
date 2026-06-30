@@ -2,8 +2,9 @@
 import datetime
 import pytest
 
-from ae.base import DATE_TIME_ISO, DATE_ISO, DEF_ENCODE_ERRORS
-from ae.parse_date import parse_date
+from ae.base import DATE_TIME_ISO, DATE_ISO, DEF_ENCODE_ERRORS, parse_date
+
+
 from ae.literal import Literal
 
 
@@ -204,7 +205,6 @@ class TestLiteral:
         assert lit.value is None
         lit.value = "'" + st + "'"
         assert lit.value == st
-
 
     def test_str_values_err(self):
         st = "tst_str"

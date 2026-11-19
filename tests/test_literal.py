@@ -105,7 +105,7 @@ class TestLiteral:
         assert lit.value is bs
 
         lit = Literal(literal_or_value=bs)
-        assert isinstance(lit.value, str)
+        assert isinstance(lit.value, str)   # bytes literal converted to str
         assert lit.value == 'TEST'
 
         lit.value = bs

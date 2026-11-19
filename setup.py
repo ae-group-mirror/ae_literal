@@ -1,19 +1,18 @@
-# THIS FILE IS EXCLUSIVELY MAINTAINED by the project aedev.project_tpls v0.3.79
-""" setup of ae namespace module portion literal: literal type detection and evaluation. """
-import sys
-# noinspection PyUnresolvedReferences
+# THIS FILE IS EXCLUSIVELY MAINTAINED by the project aedev.project_tpls v0.3.109
+""" setup of ae namespace module portion literal: literal type detection and evaluation api. """
 import pathlib
-# noinspection PyUnresolvedReferences
+import sys
+from typing import Any
 import setuptools
 
 
 print("SetUp " + __name__ + ": " + sys.executable + str(sys.argv) + f" {sys.path=}")
 
-setup_kwargs = {
+setup_kwargs: dict[str, Any] = {
     'author': 'AndiEcker',
     'author_email': 'aecker2@gmail.com',
     'classifiers': [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -22,7 +21,7 @@ setup_kwargs = {
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Typing :: Typed',
     ],
-    'description': 'ae namespace module portion literal: literal type detection and evaluation',
+    'description': 'ae namespace module portion literal: literal type detection and evaluation api',
     'extras_require': {
         'dev': [
             'aedev_project_tpls',
@@ -76,10 +75,10 @@ setup_kwargs = {
     },
     'python_requires': '>=3.12',
     'url': 'https://gitlab.com/ae-group/ae_literal',
-    'version': '0.3.36',
+    'version': '0.4.36',
     'zip_safe': True,
 }
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     setuptools.setup(**setup_kwargs)
-    pass
+    ...
